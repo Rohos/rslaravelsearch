@@ -20,42 +20,42 @@ php artisan vendor:publish --tag=rslaravelsearch_config
 ##### 2.1 Change config/rslaravelsearch.php if you need
 ##### 2.2 Create model
 ```php
-    // For example create 2 tables
-    Schema::create('users', function (Blueprint $table) {
-        $table->increments('id');
-        $table->string('name');
-        $table->string('email')->unique();
-        $table->string('password');
-        $table->rememberToken();
-        $table->timestamps();
-    });
+// For example create 2 tables
+Schema::create('users', function (Blueprint $table) {
+    $table->increments('id');
+    $table->string('name');
+    $table->string('email')->unique();
+    $table->string('password');
+    $table->rememberToken();
+    $table->timestamps();
+});
 
-    Schema::create('posts', function (Blueprint $table) {
-        $table->increments('id');
-        $table->string('pagetitle');
-        $table->boolean('published')->default(1)->index();
-        $table->unsignedInteger('author_id');
-        $table->text('content');
-        $table->timestamps();
+Schema::create('posts', function (Blueprint $table) {
+    $table->increments('id');
+    $table->string('pagetitle');
+    $table->boolean('published')->default(1)->index();
+    $table->unsignedInteger('author_id');
+    $table->text('content');
+    $table->timestamps();
 
-        $table->foreign('author_id', 'author_id_f_posts')
-            ->references('id')
-            ->on('users');
-    });
+    $table->foreign('author_id', 'author_id_f_posts')
+        ->references('id')
+        ->on('users');
+});
 ```
 ##### 2.3 Simple search
 Now for search posts 
 ```php
-    $post = new \App\Post;
-    // Create array or $request->all()
-    $data = [
-        'published' => 1,
-        'author_id' => 5
-    ];
+$post = new \App\Post;
+// Create array or $request->all()
+$data = [
+    'published' => 1,
+    'author_id' => 5
+];
 
-    // Return 
-    $posts = $post->rssearch($data)->get();
-    $postsWithCount = $post->rssearchWithCount($data);
+// Return 
+$posts = $post->rssearch($data)->get();
+$postsWithCount = $post->rssearchWithCount($data);
 ```
 First create class PostSimpleSearch. This class must extends QueryFilter, and create public methods with name = config "mtd_prefix" + key_field_from_data. If you want search by field published - method named "_published()"
 ```php
@@ -102,17 +102,17 @@ That's all
 ##### 2.3 A more complex search
 For example search by user field
 ```php
-    $post = new \App\Post;
-    $entity = 'withUser';
-    // Create array or $request->all()
-    $data = [
-        'published' => 1,
-        'email' => "John@doe.com"
-    ];
+$post = new \App\Post;
+$entity = 'withUser';
+// Create array or $request->all()
+$data = [
+    'published' => 1,
+    'email' => "John@doe.com"
+];
 
-    // Return 
-    $posts = $post->rssearch($data, $entity)->get();
-    $postsWithCount = $post->rssearchWithCount($data, $entity);
+// Return 
+$posts = $post->rssearch($data, $entity)->get();
+$postsWithCount = $post->rssearchWithCount($data, $entity);
 ```
 Add a relationship for Post model and new search entity PostSearch
 ```php
