@@ -99,7 +99,7 @@ class Post extends Model
 ```
 That's all
 
-##### 2.3 A more complex search
+##### 2.4 A more complex search
 For example search by user field
 ```php
 $post = new \App\Post;
